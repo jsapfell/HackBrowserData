@@ -6,6 +6,7 @@ require (
 	github.com/gocarina/gocsv v0.0.0-20230226133904-70c27cb2918a
 	github.com/godbus/dbus/v5 v5.1.0
 	github.com/gookit/slog v0.4.0
+	github.com/keybase/go-keychain v0.0.0-20230523030712-b5615109f100
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/otiai10/copy v1.9.0
 	github.com/ppacher/go-dbus-keyring v1.0.1
