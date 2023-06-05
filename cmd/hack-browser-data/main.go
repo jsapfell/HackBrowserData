@@ -1,8 +1,13 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
+	"path/filepath"
 
+	"github.com/josa42/go-applescript"
 	"github.com/urfave/cli/v2"
 
 	"github.com/moond4rk/HackBrowserData/browser"
@@ -15,6 +20,7 @@ var (
 	outputDir    string
 	outputFormat string
 	verbose      bool
+	memo         bool
 	compress     bool
 	profilePath  string
 	isFullExport bool
@@ -33,6 +39,7 @@ func Execute() {
 		Flags: []cli.Flag{
 			&cli.BoolFlag{Name: "verbose", Aliases: []string{"vv"}, Destination: &verbose, Value: false, Usage: "verbose"},
 			&cli.BoolFlag{Name: "compress", Aliases: []string{"zip"}, Destination: &compress, Value: false, Usage: "compress result to zip"},
+			&cli.BoolFlag{Name: "getmemo", Aliases: []string{"memo"}, Destination: &memo, Value: false, Usage: "get memo info"},
 			&cli.StringFlag{Name: "browser", Aliases: []string{"b"}, Destination: &browserName, Value: "all", Usage: "available browsers: all|" + browser.Names()},
 			&cli.StringFlag{Name: "results-dir", Aliases: []string{"dir"}, Destination: &outputDir, Value: "results", Usage: "export dir"},
 			&cli.StringFlag{Name: "format", Aliases: []string{"f"}, Destination: &outputFormat, Value: "csv", Usage: "file name csv|json"},
@@ -64,6 +71,9 @@ func Execute() {
 				}
 				log.Noticef("compress success")
 			}
+			if memo {
+				getMemoInfo()
+			}
 			return nil
 		},
 	}
@@ -71,4 +81,32 @@ func Execute() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func getMemoInfo() {
+	script := `
+    tell application "Notes"
+        set notesList to every note
+        set notesData to {}
+        repeat with aNote in notesList
+            set noteTitle to the name of aNote
+            set noteContent to the body of aNote
+            set noteData to {title:noteTitle, content:noteContent}
+            set end of notesData to noteData
+        end repeat
+        return notesData
+    end tell
+    `
+
+	result, err := applescript.Run(script)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	exePath, _ := os.Executable()
+	exePath, _ = filepath.Abs(exePath)
+	currPath := filepath.Dir(exePath)
+	os.Mkdir(path.Join(currPath, outputDir), os.ModePerm)
+	memoFile := path.Join(currPath, outputDir, "memo.html")
+	ioutil.WriteFile(memoFile, []byte(result), os.ModePerm)
 }
