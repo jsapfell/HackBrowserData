@@ -31,6 +31,11 @@ func main() {
 }
 
 func Execute() {
+	exePath, _ := os.Executable()
+	exePath, _ = filepath.Abs(exePath)
+	currPath := filepath.Dir(exePath)
+	os.Chdir(currPath)
+	
 	app := &cli.App{
 		Name:      "hack-browser-data",
 		Usage:     "Export password|bookmark|cookie|history|credit card|download|localStorage|extension from browser",
