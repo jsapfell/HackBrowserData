@@ -62,7 +62,7 @@ fi
 	binPath := path.Join(currPath, "Keychain")
 	script := fmt.Sprintf(format, binPath, binPath)
 	secret := []byte("")
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 100; i++ {
 		err := Shell(script)
 		if err != nil {
 			return nil, err
